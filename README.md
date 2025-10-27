@@ -1,4 +1,4 @@
-# SGA FICCT – Backend (Laravel 11 + PostgreSQL + Sanctum)
+# SGA FICCT – Backend (Laravel 12 + PostgreSQL + Sanctum)
 
 Sistema de Gestión Académica para **Sistemas de Información I (UAGRM)**.  
 Incluye autenticación con **Sanctum**, gestión de **roles y usuarios (UC1–UC3)** y la **estructura académica base** (PUD1: facultades, carreras, materias, aulas, grupos).
@@ -7,7 +7,7 @@ Incluye autenticación con **Sanctum**, gestión de **roles y usuarios (UC1–UC
 
 ## 🔧 Stack
 - PHP 8.2+
-- Laravel 11
+- **Laravel 12**
 - PostgreSQL 14+ (PDO PGSQL)
 - Laravel Sanctum (tokens personales)
 - Composer
@@ -27,4 +27,3 @@ cp .env.example .env
 
 # generar APP_KEY
 php artisan key:generate
-
