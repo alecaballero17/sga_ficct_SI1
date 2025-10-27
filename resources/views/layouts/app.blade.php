@@ -15,10 +15,6 @@
       <a href="{{ route('web.carreras.index') }}" class="hover:underline">Carreras</a>
       <a href="{{ route('web.materias.index') }}" class="hover:underline">Materias</a>
       <a href="{{ route('web.aulas.index') }}" class="hover:underline">Aulas</a>
-      <a href="{{ route('web.facultades.index') }}" class="hover:underline">Facultades</a>
-      <a href="{{ route('web.carreras.index') }}" class="hover:underline">Carreras</a>
-      <a href="{{ route('web.materias.index') }}" class="hover:underline">Materias</a>
-      <a href="{{ route('web.aulas.index') }}" class="hover:underline">Aulas</a>
     </div>
   </nav>
 
