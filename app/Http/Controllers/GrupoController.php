@@ -7,59 +7,34 @@ use Illuminate\Http\Request;
 
 class GrupoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() { return Grupo::with(['materia','aula'])->orderByDesc('id')->get(); }
+
+    public function store(Request $r) {
+        $data = $r->validate([
+            'codigo'=>'required|string|max:10',
+            'materia_id'=>'required|exists:materias,id',
+            'aula_id'=>'nullable|exists:aulas,id',
+            'cupos'=>'integer|min:1',
+        ]);
+        $data['cupos'] = $data['cupos'] ?? 30;
+        return response()->json(Grupo::create($data)->load(['materia','aula']), 201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function show(Grupo $grupo) { return $grupo->load(['materia','aula']); }
+
+    public function update(Request $r, Grupo $grupo) {
+        $data = $r->validate([
+            'codigo'=>'sometimes|string|max:10',
+            'materia_id'=>'sometimes|exists:materias,id',
+            'aula_id'=>'sometimes|nullable|exists:aulas,id',
+            'cupos'=>'sometimes|integer|min:1',
+        ]);
+        $grupo->update($data);
+        return $grupo->load(['materia','aula']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Grupo $grupo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Grupo $grupo)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Grupo $grupo)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Grupo $grupo)
-    {
-        //
+    public function destroy(Grupo $grupo) {
+        $grupo->delete();
+        return response()->json(['ok'=>true]);
     }
 }

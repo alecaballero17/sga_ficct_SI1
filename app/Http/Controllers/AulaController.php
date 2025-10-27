@@ -7,59 +7,32 @@ use Illuminate\Http\Request;
 
 class AulaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() { return Aula::orderBy('codigo')->get(); }
+
+    public function store(Request $r) {
+        $data = $r->validate([
+            'codigo'=>'required|string|max:20|unique:aulas,codigo',
+            'capacidad'=>'integer|min:1',
+            'ubicacion'=>'nullable|string|max:120',
+        ]);
+        $data['capacidad'] = $data['capacidad'] ?? 40;
+        return response()->json(Aula::create($data), 201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function show(Aula $aula) { return $aula->load('grupos'); }
+
+    public function update(Request $r, Aula $aula) {
+        $data = $r->validate([
+            'codigo'=>"sometimes|string|max:20|unique:aulas,codigo,{$aula->id}",
+            'capacidad'=>'sometimes|integer|min:1',
+            'ubicacion'=>'sometimes|nullable|string|max:120',
+        ]);
+        $aula->update($data);
+        return $aula;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Aula $aula)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Aula $aula)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Aula $aula)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Aula $aula)
-    {
-        //
+    public function destroy(Aula $aula) {
+        $aula->delete();
+        return response()->json(['ok'=>true]);
     }
 }
