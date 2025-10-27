@@ -4,52 +4,41 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Carrera;
-use App\Models\Facultad;
 use Illuminate\Http\Request;
 
 class CarreraWebController extends Controller
 {
     public function index()
     {
-        $carreras = Carrera::with('facultad')->orderBy('id', 'desc')->paginate(10);
+        $carreras = Carrera::orderBy('id','desc')->paginate(10);
         return view('carreras.index', compact('carreras'));
     }
 
     public function create()
     {
-        $facultades = Facultad::orderBy('nombre')->get();
-        return view('carreras.create', compact('facultades'));
+        return view('carreras.create');
     }
 
     public function store(Request $r)
     {
         $data = $r->validate([
             'nombre' => 'required|string|max:120',
-            'codigo' => 'required|string|max:20|unique:carreras,codigo',
-            'facultad_id' => 'required|exists:facultades,id',
         ]);
-
         Carrera::create($data);
-
-        return redirect()->route('web.carreras.index')->with('ok', 'Carrera creada correctamente');
+        return redirect()->route('web.carreras.index')->with('ok', 'Carrera creada');
     }
 
     public function edit(Carrera $carrera)
     {
-        $facultades = Facultad::orderBy('nombre')->get();
-        return view('carreras.edit', compact('carrera', 'facultades'));
+        return view('carreras.edit', ['item' => $carrera]);
     }
 
     public function update(Request $r, Carrera $carrera)
     {
         $data = $r->validate([
             'nombre' => 'required|string|max:120',
-            'codigo' => 'required|string|max:20|unique:carreras,codigo,' . $carrera->id,
-            'facultad_id' => 'required|exists:facultades,id',
         ]);
-
         $carrera->update($data);
-
         return redirect()->route('web.carreras.index')->with('ok', 'Carrera actualizada');
     }
 
