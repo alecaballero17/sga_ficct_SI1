@@ -14,6 +14,8 @@ use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\AulaController;
 use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\DocenteController;
+
 
 // Ruta de prueba para verificar conexión
 Route::get('/test', function () {
@@ -39,4 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('materias', MateriaController::class);
     Route::apiResource('aulas', AulaController::class);
     Route::apiResource('grupos', GrupoController::class);
+
+
+    Route::apiResource('docentes', DocenteController::class);
+
 });
