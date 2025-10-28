@@ -11,16 +11,15 @@ class CarreraWebController extends Controller
 {
     public function index()
     {
-        $carreras = \App\Models\Carrera::with('facultad')
+        $carreras = Carrera::with('facultad')
             ->orderBy('nombre')
-            ->paginate(10); // <— en vez de get()
+            ->paginate(10);
+
         return view('carreras.index', compact('carreras'));
     }
 
-
     public function create()
     {
-        // ✅ Enviar $facultades a la vista
         $facultades = Facultad::orderBy('nombre')->get();
         return view('carreras.create', compact('facultades'));
     }
@@ -28,16 +27,16 @@ class CarreraWebController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'codigo'      => ['required','string','max:20','unique:carreras,codigo'],
-            'nombre'      => ['required','string','max:255'],
-            'facultad_id' => ['required','exists:facultads,id'],
+            'nombre'       => ['required','string','max:100'],
+            'sigla'        => ['nullable','string','max:10'],
+            'facultad_id'  => ['required','exists:facultad,id'],
+            'estado'       => ['nullable','boolean'],
         ]);
+        $data['estado'] = (bool) ($data['estado'] ?? true);
 
         Carrera::create($data);
 
-        return redirect()
-            ->route('web.carreras.index')
-            ->with('ok', 'Carrera creada correctamente.');
+        return redirect()->route('web.carreras.index')->with('ok', 'Carrera creada correctamente.');
     }
 
     public function edit(Carrera $carrera)
@@ -49,16 +48,16 @@ class CarreraWebController extends Controller
     public function update(Request $request, Carrera $carrera)
     {
         $data = $request->validate([
-            'codigo'      => ['required','string','max:20','unique:carreras,codigo,'.$carrera->id],
-            'nombre'      => ['required','string','max:255'],
-            'facultad_id' => ['required','exists:facultads,id'],
+            'nombre'       => ['required','string','max:100'],
+            'sigla'        => ['nullable','string','max:10'],
+            'facultad_id'  => ['required','exists:facultad,id'],
+            'estado'       => ['nullable','boolean'],
         ]);
+        $data['estado'] = (bool) ($data['estado'] ?? true);
 
         $carrera->update($data);
 
-        return redirect()
-            ->route('web.carreras.index')
-            ->with('ok', 'Carrera actualizada correctamente.');
+        return redirect()->route('web.carreras.index')->with('ok', 'Carrera actualizada correctamente.');
     }
 
     public function destroy(Carrera $carrera)

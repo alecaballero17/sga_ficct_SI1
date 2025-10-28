@@ -9,27 +9,13 @@ class Carrera extends Model
 {
     use HasFactory;
 
-    protected $table = 'carreras';
+    protected $table = 'carrera';
+    public $timestamps = false; // <- importante
 
-    protected $fillable = [
-        'nombre',
-        'codigo',
-        'facultad_id',
-    ];
+    protected $fillable = ['nombre','sigla','estado','facultad_id'];
 
-    /**
-     * Una carrera pertenece a una facultad
-     */
     public function facultad()
     {
-        return $this->belongsTo(Facultad::class);
-    }
-
-    /**
-     * Una carrera tiene muchas materias
-     */
-    public function materias()
-    {
-        return $this->hasMany(Materia::class);
+        return $this->belongsTo(Facultad::class, 'facultad_id');
     }
 }

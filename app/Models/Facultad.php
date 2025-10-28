@@ -9,18 +9,13 @@ class Facultad extends Model
 {
     use HasFactory;
 
-    protected $table = 'facultades'; // nombre real de la tabla en la BD
+    protected $table = 'facultad';
+    public $timestamps = false; // <- tus tablas no tienen created_at/updated_at
 
-    protected $fillable = [
-        'nombre',
-        'descripcion',
-    ];
+    protected $fillable = ['nombre','sigla','estado'];
 
-    /**
-     * Una facultad puede tener muchas carreras
-     */
     public function carreras()
     {
-        return $this->hasMany(Carrera::class);
+        return $this->hasMany(Carrera::class, 'facultad_id');
     }
 }
